@@ -1,16 +1,4 @@
-import { ReactNode } from "react";
-
-type TRoute = {
-  path: string;
-  element: ReactNode;
-};
-
-type TUSerPath = {
-  name: string;
-  path?: string;
-  element?: ReactNode;
-  children?: TUSerPath[];
-};
+import { TRoute, TUSerPath } from "../types";
 
 export const routeGenarator = (items:TUSerPath[]) => {
   const routes = items.reduce((acc: TRoute[], item) => {
