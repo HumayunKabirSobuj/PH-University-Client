@@ -15,7 +15,7 @@ type TSidebarItem = {
   label: ReactNode;
   children?:TSidebarItem[]
 };
-const adminPaths = [
+export const adminPaths = [
   {
     name: "Dashboard",
     path: "dashboard",
@@ -39,11 +39,7 @@ const adminPaths = [
         path: "create-student",
         element: <CreateStudent />,
       },
-      {
-        name: "Create Member",
-        path: "create-member",
-        element: <CreateStudent />,
-      },
+      
     ],
   },
 ];
@@ -91,21 +87,22 @@ export const adminSidebarItems = adminPaths.reduce((acc:TSidebarItem[], item) =>
 }, []);
 
 // Programatical way
-export const adminRoutes = adminPaths.reduce((acc: TRoute[], item) => {
-  if (item.path && item.element) {
-    acc.push({
-      path: item.path,
-      element: item.element,
-    });
-  }
+// export const adminRoutes = adminPaths.reduce((acc: TRoute[], item) => {
+//   if (item.path && item.element) {
+//     acc.push({
+//       path: item.path,
+//       element: item.element,
+//     });
+//   }
 
-  if (item.children) {
-    item.children.forEach((child) => {
-      acc.push({
-        path: child.path,
-        element: child.element,
-      });
-    });
-  }
-  return acc;
-}, []);
+//   if (item.children) {
+//     item.children.forEach((child) => {
+//       acc.push({
+//         path: child.path,
+//         element: child.element,
+//       });
+//     });
+//   }
+//   return acc;
+// }, []);
+
