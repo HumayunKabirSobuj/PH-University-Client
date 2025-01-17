@@ -29,7 +29,7 @@ const adminPaths2 = [
 const newArray = adminPaths2.reduce((acc, item) => {
   if (item.path && item.name) {
     acc.push({
-      path: item.name,
+      key: item.name,
       label: "NAVLINK",
     });
   }
