@@ -2,25 +2,27 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
 import { useLoginMutation } from "../redux/features/auth/authApi";
 import { useAppDispatch } from "../redux/hooks";
-import { setUser } from "../redux/features/auth/authSlice";
+import { setUser, TUser } from "../redux/features/auth/authSlice";
 import { verifyToken } from "../utils/verifyToken";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { FieldValues } from "react-hook-form";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [login, { error }] = useLoginMutation();
+  const [login] = useLoginMutation();
   const dispatch = useAppDispatch();
-  const onFinish = async (values: { id: string; password: string }) => {
+  const onFinish = async (values: FieldValues) => {
     const toastId = toast.loading("Logging In...");
     try {
       const res = await login(values).unwrap();
       // console.log(res);
-      const user = verifyToken(res.data.accessToken);
+      const user = verifyToken(res.data.accessToken) as TUser;
       // console.log(user)
       dispatch(setUser({ user: user, token: res.data.accessToken }));
       toast.success("Login Succesfully", { id: toastId, duration: 2000 });
       navigate(`/${user.role}/dashboard`);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error("Something Went Wrong", { id: toastId, duration: 2000 });
     }
