@@ -4,16 +4,26 @@ import { useLoginMutation } from "../redux/features/auth/authApi";
 import { useAppDispatch } from "../redux/hooks";
 import { setUser } from "../redux/features/auth/authSlice";
 import { verifyToken } from "../utils/verifyToken";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [login, { error }] = useLoginMutation();
   const dispatch = useAppDispatch();
   const onFinish = async (values: { id: string; password: string }) => {
-    const res = await login(values).unwrap();
-    // console.log(res);
-    const user = verifyToken(res.data.accessToken)
-    // console.log(user)
-    dispatch(setUser({ user: user, token: res.data.accessToken }));
+    const toastId = toast.loading("Logging In...");
+    try {
+      const res = await login(values).unwrap();
+      // console.log(res);
+      const user = verifyToken(res.data.accessToken);
+      // console.log(user)
+      dispatch(setUser({ user: user, token: res.data.accessToken }));
+      toast.success("Login Succesfully", { id: toastId, duration: 2000 });
+      navigate(`/${user.role}/dashboard`);
+    } catch (error) {
+      toast.error("Something Went Wrong", { id: toastId, duration: 2000 });
+    }
   };
 
   return (
@@ -53,7 +63,7 @@ const Login = () => {
           rules={[{ required: true, message: "Please input your Password!" }]}
         >
           {/* <Input prefix={<LockOutlined />} type="password" placeholder="Password" /> */}
-          <Input.Password prefix={<LockOutlined />} />
+          <Input.Password prefix={<LockOutlined />} placeholder="PASSWORD" />
         </Form.Item>
 
         <Form.Item>
