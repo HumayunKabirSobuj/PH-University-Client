@@ -1,5 +1,4 @@
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Form, Input } from "antd";
+import { Button, Row } from "antd";
 import { useLoginMutation } from "../redux/features/auth/authApi";
 import { useAppDispatch } from "../redux/hooks";
 import { setUser, TUser } from "../redux/features/auth/authSlice";
@@ -7,74 +6,40 @@ import { verifyToken } from "../utils/verifyToken";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { FieldValues } from "react-hook-form";
+import PHForm from "../components/form/PHForm";
+import PHInput from "../components/form/PHInput";
 
 const Login = () => {
   const navigate = useNavigate();
   const [login] = useLoginMutation();
   const dispatch = useAppDispatch();
-  const onFinish = async (values: FieldValues) => {
+
+
+  const onSubmit = async (data: FieldValues) => {
+    console.log(data);
     const toastId = toast.loading("Logging In...");
     try {
-      const res = await login(values).unwrap();
-      // console.log(res);
+      const res = await login(data).unwrap();
+      //   console.log(res);
       const user = verifyToken(res.data.accessToken) as TUser;
-      // console.log(user)
+      //   // console.log(user)
       dispatch(setUser({ user: user, token: res.data.accessToken }));
       toast.success("Login Succesfully", { id: toastId, duration: 2000 });
       navigate(`/${user.role}/dashboard`);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error("Something Went Wrong", { id: toastId, duration: 2000 });
     }
   };
 
   return (
-    <div
-      style={{
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Form
-        name="login"
-        initialValues={{ remember: true }}
-        style={{
-          width: "400px",
-          height: "260px",
-          padding: "20px",
-          border: "1px solid #ccc",
-          borderRadius: "8px",
-          boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-          backgroundColor: "#fff",
-        }}
-        onFinish={onFinish}
-      >
-        <h1 style={{ textAlign: "center", marginBottom: "20px" }}>
-          Login Here
-        </h1>
-        <Form.Item
-          name="id"
-          rules={[{ required: true, message: "Please input your ID!" }]}
-        >
-          <Input prefix={<UserOutlined />} placeholder="ID" />
-        </Form.Item>
-        <Form.Item
-          name="password"
-          rules={[{ required: true, message: "Please input your Password!" }]}
-        >
-          {/* <Input prefix={<LockOutlined />} type="password" placeholder="Password" /> */}
-          <Input.Password prefix={<LockOutlined />} placeholder="PASSWORD" />
-        </Form.Item>
-
-        <Form.Item>
-          <Button block type="primary" htmlType="submit">
-            Log in
-          </Button>
-        </Form.Item>
-      </Form>
-    </div>
+    <Row justify={"center"} align={"middle"} style={{ height: "100vh" }}>
+      <PHForm onSubmit={onSubmit}>
+        <PHInput type={"text"} name={"id"} label={"ID :"} />
+        <PHInput type={"text"} name={"password"} label={"Password :"} />
+        <Button htmlType="submit">Login</Button>
+      </PHForm>
+    </Row>
   );
 };
 
