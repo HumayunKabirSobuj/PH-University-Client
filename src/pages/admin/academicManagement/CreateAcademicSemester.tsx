@@ -8,7 +8,7 @@ import { monthOptions } from "../../../constants/global";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { academicSemesterSchema } from "../../../schemas/academicManagement.schema";
-// const nameOptions = [
+// const semesterOptions = [
 //   {
 //     value: "01",
 //     label: "Autumn",
