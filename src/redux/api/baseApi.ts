@@ -24,15 +24,13 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
-
-
 const baseQueryWithRefreshToken: BaseQueryFn<
   FetchArgs,
   BaseQueryApi,
   DefinitionType
 > = async (args, api, extraOptions): Promise<any> => {
   let result = await baseQuery(args, api, extraOptions);
-  console.log(result);
+  // console.log(result);
 
   if (result?.error?.status === 404) {
     const errorData = result.error.data as ErrorResponse;
@@ -67,6 +65,3 @@ export const baseApi = createApi({
   baseQuery: baseQueryWithRefreshToken,
   endpoints: () => ({}),
 });
-
-
-
