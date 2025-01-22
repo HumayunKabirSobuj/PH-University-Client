@@ -5,6 +5,8 @@ import PHSelect from "../../../components/form/PHSelect";
 import { semesterOptions } from "../../../constants/semester";
 import { monthOptions } from "../../../constants/global";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 // const nameOptions = [
 //   {
 //     value: "01",
@@ -41,10 +43,20 @@ const CreateAcademicSemester = () => {
     console.log(semesterData);
   };
 
+  const academicSemesterSchema = z.object({
+    name: z.string({ required_error: "Please select a Name" }),
+    year: z.string({ required_error: "Please select a Year" }),
+    startMonth: z.string({ required_error: "Please select a Start Month" }),
+    endMonth: z.string({ required_error: "Please select a End Month" }),
+  });
+
   return (
     <Flex justify="center" align="center">
       <Col span={6}>
-        <PHForm onSubmit={onSubmit}>
+        <PHForm
+          onSubmit={onSubmit}
+          resolver={zodResolver(academicSemesterSchema)}
+        >
           <PHSelect label="Name" name={"name"} options={semesterOptions} />
           <PHSelect label="Year" name={"year"} options={yearOptions} />
           <PHSelect
