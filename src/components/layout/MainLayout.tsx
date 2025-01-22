@@ -31,14 +31,21 @@ const MainLayout = () => {
     }, 3000);
 
     dispatch(logout());
-    toast.success("Logout succesfully",{duration:2000})
+    toast.success("Logout succesfully", { duration: 2000 });
     await logOut({});
   };
   return (
+   
     <Layout style={{ height: "100%" }}>
       <Sidebar></Sidebar>
       <Layout>
-        <Header>
+        <Header
+          style={{
+            position: "sticky",
+            top: 0,
+            zIndex: 1000, // Ensures the header stays above other elements
+          }}
+        >
           <Button
             type="primary"
             icon={<PoweroffOutlined />}
