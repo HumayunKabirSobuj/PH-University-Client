@@ -1,8 +1,17 @@
-import { BaseQueryApi, BaseQueryFn, createApi, DefinitionType, FetchArgs, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {
+  BaseQueryApi,
+  BaseQueryFn,
+  createApi,
+  DefinitionType,
+  FetchArgs,
+  fetchBaseQuery,
+} from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store";
 import { logout, setUser } from "../features/auth/authSlice";
 import { toast } from "sonner";
-
+interface ErrorResponse {
+  message: string;
+}
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:5000/api/v1",
   credentials: "include",
@@ -15,12 +24,21 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
-const baseQueryWithRefreshToken:BaseQueryFn<FetchArgs,BaseQueryApi,DefinitionType> = async (args, api, extraOptions):Promise<any> => {
+
+
+const baseQueryWithRefreshToken: BaseQueryFn<
+  FetchArgs,
+  BaseQueryApi,
+  DefinitionType
+> = async (args, api, extraOptions): Promise<any> => {
   let result = await baseQuery(args, api, extraOptions);
   console.log(result);
-  
-  if(result?.error?.status === 404){
-    toast.error(result.error.data.message)
+
+  if (result?.error?.status === 404) {
+    const errorData = result.error.data as ErrorResponse;
+    if (errorData?.message) {
+      toast.error(errorData.message);
+    }
   }
 
   if (result?.error?.status === 401) {
@@ -31,7 +49,6 @@ const baseQueryWithRefreshToken:BaseQueryFn<FetchArgs,BaseQueryApi,DefinitionTyp
       credentials: "include",
     });
 
-   
     const data = await res.json();
     // console.log(data);
     if (data?.data?.accessToken) {
@@ -50,3 +67,6 @@ export const baseApi = createApi({
   baseQuery: baseQueryWithRefreshToken,
   endpoints: () => ({}),
 });
+
+
+
