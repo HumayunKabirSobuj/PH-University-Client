@@ -31,7 +31,7 @@ const yearOptions = [0, 1, 2, 3, 4].map((number) => ({
   value: String(currentYear + number),
   label: String(currentYear + number),
 }));
-console.log(yearOptions);
+// console.log(yearOptions);
 
 const CreateAcademicSemester = () => {
   const [addAcademicSemester] = useAddAcademicSemesterMutation();
@@ -48,7 +48,7 @@ const CreateAcademicSemester = () => {
       endMonth: data?.endMonth,
     };
     try {
-      console.log(semesterData);
+      // console.log(semesterData);
       const res = await addAcademicSemester(semesterData) as TResponse;
       if (res.error) {
         toast.error(res.error.data.message, { id: toastId });
