@@ -41,7 +41,6 @@ const studentDummyData = {
 const CreateStudent = () => {
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     console.log(data);
-
     const formData = new FormData();
     formData.append("data", JSON.stringify(data));
     // console.log(formData.get('something'));
