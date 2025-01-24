@@ -8,7 +8,6 @@ export type TTableData = Pick<
   TAcademicSemester,
   "name" | "startMonth" | "endMonth" | "year"
 >;
-
 const AcademicSemester = () => {
   const [params, setParams] = useState<TQueryParam[] | undefined>(undefined);
   // const { data: semesterData } = useGetAllSemestersQuery([
